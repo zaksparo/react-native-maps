@@ -27,7 +27,7 @@ public class AirMapLocalTile extends AirMapFeature {
 						mAssets = assets;
 						this.tileSize = tileSizet;
 						this.pathTemplate = pathTemplate;
-						this.urlScope = urlScope
+						this.urlScope = urlScope;
 				}
 
         @Override
