@@ -1,6 +1,7 @@
 package com.airbnb.android.react.maps;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Tile;
@@ -20,12 +21,18 @@ public class AirMapLocalTile extends AirMapFeature {
         private static final int BUFFER_SIZE = 16 * 1024;
         private int tileSize;
         private String pathTemplate;
+				private AssetManager mAssets;
 
+				public AIRMapLocalTileProvider(int tileSizet, String pathTemplate, AssetManager assets) {
+						mAssets = assets;
+						this.tileSize = tileSizet;
+						this.pathTemplate = pathTemplate;
+				}
 
-        public AIRMapLocalTileProvider(int tileSizet, String pathTemplate) {
-            this.tileSize = tileSizet;
-            this.pathTemplate = pathTemplate;
-        }
+        // public AIRMapLocalTileProvider(int tileSizet, String pathTemplate) {
+        //     this.tileSize = tileSizet;
+        //     this.pathTemplate = pathTemplate;
+        // }
 
         @Override
         public Tile getTile(int x, int y, int zoom) {
@@ -42,33 +49,57 @@ public class AirMapLocalTile extends AirMapFeature {
         }
 
         private byte[] readTileImage(int x, int y, int zoom) {
-            InputStream in = null;
-            ByteArrayOutputStream buffer = null;
-            File file = new File(getTileFilename(x, y, zoom));
+      			InputStream in = null;
+        		ByteArrayOutputStream buffer = null;
+            //File file = new File(getTileFilename(x, y, zoom));
 
-            try {
-                in = new FileInputStream(file);
-                buffer = new ByteArrayOutputStream();
+						try {
+								in = mAssets.open(getTileFilename(x, y, zoom));
+								buffer = new ByteArrayOutputStream();
 
-                int nRead;
-                byte[] data = new byte[BUFFER_SIZE];
+								int nRead;
+								byte[] data = new byte[BUFFER_SIZE];
 
-                while ((nRead = in.read(data, 0, BUFFER_SIZE)) != -1) {
-                    buffer.write(data, 0, nRead);
-                }
-                buffer.flush();
+								while ((nRead = in.read(data, 0, BUFFER_SIZE)) != -1) {
+										buffer.write(data, 0, nRead);
+								}
+								buffer.flush();
 
-                return buffer.toByteArray();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            } catch (OutOfMemoryError e) {
-                e.printStackTrace();
-                return null;
-            } finally {
-                if (in != null) try { in.close(); } catch (Exception ignored) {}
-                if (buffer != null) try { buffer.close(); } catch (Exception ignored) {}
-            }
+								return buffer.toByteArray();
+						} catch (IOException e) {
+								e.printStackTrace();
+								return null;
+						} catch (OutOfMemoryError e) {
+								e.printStackTrace();
+								return null;
+						} finally {
+								if (in != null) try { in.close(); } catch (Exception ignored) {}
+								if (buffer != null) try { buffer.close(); } catch (Exception ignored) {}
+						}
+
+            // try {
+            //     in = new FileInputStream(file);
+            //     buffer = new ByteArrayOutputStream();
+
+            //     int nRead;
+            //     byte[] data = new byte[BUFFER_SIZE];
+
+            //     while ((nRead = in.read(data, 0, BUFFER_SIZE)) != -1) {
+            //         buffer.write(data, 0, nRead);
+            //     }
+            //     buffer.flush();
+
+            //     return buffer.toByteArray();
+            // } catch (IOException e) {
+            //     e.printStackTrace();
+            //     return null;
+            // } catch (OutOfMemoryError e) {
+            //     e.printStackTrace();
+            //     return null;
+            // } finally {
+            //     if (in != null) try { in.close(); } catch (Exception ignored) {}
+            //     if (buffer != null) try { buffer.close(); } catch (Exception ignored) {}
+            // }
         }
 
         private String getTileFilename(int x, int y, int zoom) {
@@ -126,7 +157,7 @@ public class AirMapLocalTile extends AirMapFeature {
     private TileOverlayOptions createTileOverlayOptions() {
         TileOverlayOptions options = new TileOverlayOptions();
         options.zIndex(zIndex);
-        this.tileProvider = new AirMapLocalTile.AIRMapLocalTileProvider((int)this.tileSize, this.pathTemplate);
+        this.tileProvider = new AirMapLocalTile.AIRMapLocalTileProvider((int)this.tileSize, this.pathTemplate, getResources().getAssets());
         options.tileProvider(this.tileProvider);
         return options;
     }
