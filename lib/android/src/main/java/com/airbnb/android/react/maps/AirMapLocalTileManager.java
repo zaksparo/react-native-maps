@@ -53,4 +53,9 @@ public class AirMapLocalTileManager extends ViewGroupManager<AirMapLocalTile> {
         view.setZIndex(zIndex);
     }
 
+		@ReactProp(name = "urlScope") // Adding urlScope react prop bridging for adapt url scope type (file / asset)
+		public void setUrlScope(AirMapLocalTile view, String urlScope) {
+			view.setUrlScope(urlScope)
+		}
+
 }
