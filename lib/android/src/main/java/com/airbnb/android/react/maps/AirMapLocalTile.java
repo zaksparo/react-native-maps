@@ -21,6 +21,7 @@ public class AirMapLocalTile extends AirMapFeature {
         private static final int BUFFER_SIZE = 16 * 1024;
         private int tileSize;
         private String pathTemplate;
+				private String urlScope;
 				private AssetManager mAssets;
 
 				public AIRMapLocalTileProvider(int tileSizet, String pathTemplate, String urlScope, AssetManager assets) {
