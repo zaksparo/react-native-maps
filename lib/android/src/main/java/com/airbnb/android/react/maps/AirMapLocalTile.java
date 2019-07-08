@@ -23,16 +23,12 @@ public class AirMapLocalTile extends AirMapFeature {
         private String pathTemplate;
 				private AssetManager mAssets;
 
-				public AIRMapLocalTileProvider(int tileSizet, String pathTemplate, AssetManager assets) {
+				public AIRMapLocalTileProvider(int tileSizet, String pathTemplate, String urlScope, AssetManager assets) {
 						mAssets = assets;
 						this.tileSize = tileSizet;
 						this.pathTemplate = pathTemplate;
+						this.urlScope = urlScope
 				}
-
-        // public AIRMapLocalTileProvider(int tileSizet, String pathTemplate) {
-        //     this.tileSize = tileSizet;
-        //     this.pathTemplate = pathTemplate;
-        // }
 
         @Override
         public Tile getTile(int x, int y, int zoom) {
@@ -116,6 +112,7 @@ public class AirMapLocalTile extends AirMapFeature {
     private AirMapLocalTile.AIRMapLocalTileProvider tileProvider;
 
     private String pathTemplate;
+		private String urlScope;
     private float tileSize;
     private float zIndex;
 
@@ -146,6 +143,13 @@ public class AirMapLocalTile extends AirMapFeature {
             tileProvider.setTileSize((int)tileSize);
         }
     }
+
+		public void setUrlScope(String urlScope) {
+			this.urlScope = urlScope;
+			if (tileProvider != null) {
+				tileProvider.setUrlScope(urlScope);
+			}
+		}
 
     public TileOverlayOptions getTileOverlayOptions() {
         if (tileOverlayOptions == null) {
