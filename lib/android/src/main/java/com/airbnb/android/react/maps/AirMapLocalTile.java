@@ -44,6 +44,10 @@ public class AirMapLocalTile extends AirMapFeature {
             this.tileSize = tileSize;
         }
 
+				public void setUrlScope(String urlScope) {
+					this.urlScope = urlScope;
+				}
+
         private byte[] readTileImage(int x, int y, int zoom) {
       			InputStream in = null;
         		ByteArrayOutputStream buffer = null;
@@ -161,7 +165,7 @@ public class AirMapLocalTile extends AirMapFeature {
     private TileOverlayOptions createTileOverlayOptions() {
         TileOverlayOptions options = new TileOverlayOptions();
         options.zIndex(zIndex);
-        this.tileProvider = new AirMapLocalTile.AIRMapLocalTileProvider((int)this.tileSize, this.pathTemplate, getResources().getAssets());
+        this.tileProvider = new AirMapLocalTile.AIRMapLocalTileProvider((int)this.tileSize, this.pathTemplate, this.urlScope, getResources().getAssets());
         options.tileProvider(this.tileProvider);
         return options;
     }
