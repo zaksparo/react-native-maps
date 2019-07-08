@@ -52,6 +52,7 @@ public class AirMapLocalTile extends AirMapFeature {
         private byte[] readTileImage(int x, int y, int zoom) {
       			InputStream in = null;
         		ByteArrayOutputStream buffer = null;
+						System.out.println(this.urlScope)
             //File file = new File(getTileFilename(x, y, zoom));
 
 						try {
