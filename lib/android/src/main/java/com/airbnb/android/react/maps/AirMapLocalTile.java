@@ -21,7 +21,7 @@ public class AirMapLocalTile extends AirMapFeature {
         private static final int BUFFER_SIZE = 16 * 1024;
         private int tileSize;
         private String pathTemplate;
-				private String urlScope;
+				private String urlScope = "assets";
 				private AssetManager mAssets;
 
 				public AIRMapLocalTileProvider(int tileSizet, String pathTemplate, String urlScope, AssetManager assets) {
@@ -53,10 +53,21 @@ public class AirMapLocalTile extends AirMapFeature {
       			InputStream in = null;
         		ByteArrayOutputStream buffer = null;
 						System.out.println(this.urlScope);
-            //File file = new File(getTileFilename(x, y, zoom));
 
 						try {
-								in = mAssets.open(getTileFilename(x, y, zoom));
+								switch (this.urlScope) {
+									case "assets": // by default
+										in = mAssets.open(getTileFilename(x, y, zoom));
+										break;
+									case "fs":
+										File file = new File(getTileFilename(x, y, zoom));
+										in = new FileInputStream(file);
+										break;
+									default:
+										throw new IllegalArgumentExpception("You have to specify an urlScope");
+										break;
+								}
+								
 								buffer = new ByteArrayOutputStream();
 
 								int nRead;
@@ -74,34 +85,13 @@ public class AirMapLocalTile extends AirMapFeature {
 						} catch (OutOfMemoryError e) {
 								e.printStackTrace();
 								return null;
+						} catch (IllegalArgumentExpception e) {
+								e.printStackTrace();
+								return null;
 						} finally {
 								if (in != null) try { in.close(); } catch (Exception ignored) {}
 								if (buffer != null) try { buffer.close(); } catch (Exception ignored) {}
 						}
-
-            // try {
-            //     in = new FileInputStream(file);
-            //     buffer = new ByteArrayOutputStream();
-
-            //     int nRead;
-            //     byte[] data = new byte[BUFFER_SIZE];
-
-            //     while ((nRead = in.read(data, 0, BUFFER_SIZE)) != -1) {
-            //         buffer.write(data, 0, nRead);
-            //     }
-            //     buffer.flush();
-
-            //     return buffer.toByteArray();
-            // } catch (IOException e) {
-            //     e.printStackTrace();
-            //     return null;
-            // } catch (OutOfMemoryError e) {
-            //     e.printStackTrace();
-            //     return null;
-            // } finally {
-            //     if (in != null) try { in.close(); } catch (Exception ignored) {}
-            //     if (buffer != null) try { buffer.close(); } catch (Exception ignored) {}
-            // }
         }
 
         private String getTileFilename(int x, int y, int zoom) {
