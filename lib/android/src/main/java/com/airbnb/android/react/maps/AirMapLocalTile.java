@@ -15,6 +15,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.lang.IllegalArgumentException;
+
 public class AirMapLocalTile extends AirMapFeature {
 
     class AIRMapLocalTileProvider implements TileProvider {
