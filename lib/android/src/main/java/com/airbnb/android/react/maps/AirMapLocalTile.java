@@ -66,8 +66,7 @@ public class AirMapLocalTile extends AirMapFeature {
 										in = new FileInputStream(file);
 										break;
 									default:
-										throw new IllegalArgumentExpception("You have to specify an urlScope");
-										break;
+										throw new IllegalArgumentException("You have to specify an urlScope");
 								}
 								
 								buffer = new ByteArrayOutputStream();
@@ -87,7 +86,7 @@ public class AirMapLocalTile extends AirMapFeature {
 						} catch (OutOfMemoryError e) {
 								e.printStackTrace();
 								return null;
-						} catch (IllegalArgumentExpception e) {
+						} catch (IllegalArgumentException e) {
 								e.printStackTrace();
 								return null;
 						} finally {
